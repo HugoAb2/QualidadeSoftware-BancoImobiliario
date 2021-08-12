@@ -88,48 +88,70 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
+    private boolean verifyPCP(JogadorHumano jogador, FazerPropostaCompraPropriedade pcp){
+	    return pcp.getComprar();
+    }
+
+    private void setVisible(FazerPropostaCompraPropriedade pcp){
+	    pcp.setVisible(true);
+    }
+
+    private boolean isCancelar(InserirProposta proposta){
+	    return proposta.isCancelar();
+    }
+
+    private float fazerProposta(JogadorHumano jogador, InserirProposta proposta, float valorProposto){
+	    while (isCancelar(proposta)) {
+            proposta.setVisible(true);
+
+            try {
+                valorProposto = Float.parseFloat(proposta.getValorProposto());
+                if (valorProposto > jogador.getContaBancaria().getSaldo()) {
+                    JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " seu saldo é insuficiente.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " insira um valor válido.");
+            }
+        }
+	    return valorProposto;
+    }
+
+    public void mostraPedidoCompra(JogadorHumano jogador, MostrarPedidoDeCompra pedido, float valorProposto){
+        pedido.setVisible(true);
+
+        if (pedido.getAceito()) {
+            JOptionPane.showMessageDialog(null, jogador.getNome()+" comprou "+this.nome+" de "+((JogadorHumano) this.dono).getNome()+" por R$ "+valorProposto);
+            this.numCasas = 0; //IMPLEMENTAR VENDER TODAS AS CASAS/HOTÉIS PARA O BANCO---------------------------------------------------------------------------
+            jogador.pagar(this.preco);
+            this.dono.receber(this.preco);
+            this.dono.venderPropriedade(this);
+            jogador.comprarPropriedade(this);
+            this.dono = jogador;
+        } else {
+            JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " recusou sua proposta.");
+        }
+    }
+
     private void acoesVisitante(JogadorHumano jogador) {
         String proprietario = "Esse Terreno Pertence a: " + ((JogadorHumano) this.dono).getNome();
         String aluguel = "Aluguel: " + this.getAluguel();
         String valor = "Valor: " + this.preco;
         FazerPropostaCompraPropriedade pcp = new FazerPropostaCompraPropriedade(proprietario, aluguel, valor);
-        pcp.setVisible(true);
+        setVisible(pcp);
 
-        if (pcp.getComprar()) {
+        if (verifyPCP(jogador, pcp)) {
 
             InserirProposta proposta = new InserirProposta("Faça uma Proposta", "Saldo: R$ "+jogador.getContaBancaria().getSaldo(), "Valor Terreno: R$ "+this.preco, this.preco);
             float valorProposto = 0;
 
-            while (proposta.isCancelar()) {
-                proposta.setVisible(true);
+            valorProposto = fazerProposta(jogador, proposta, valorProposto);
 
-                try {
-                    valorProposto = Float.parseFloat(proposta.getValorProposto());
-                    if (valorProposto > jogador.getContaBancaria().getSaldo()) {
-                        JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " seu saldo é insuficiente.");
-                        continue;
-                    }
-                    break;
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " insira um valor válido.");
-                }
-            }
-
-            if (proposta.isCancelar()){
+            if (isCancelar(proposta)){
                 MostrarPedidoDeCompra pedido = new MostrarPedidoDeCompra(((JogadorHumano) this.dono).getNome()+": "+jogador.getNome()+" fez uma Proposta", "Valor: R$ "+valorProposto, this.nome);
-                pedido.setVisible(true);
+                mostraPedidoCompra(jogador, pedido, valorProposto);
 
-                if (pedido.getAceito()) {
-                    JOptionPane.showMessageDialog(null, jogador.getNome()+" comprou "+this.nome+" de "+((JogadorHumano) this.dono).getNome()+" por R$ "+valorProposto);
-                    this.numCasas = 0; //IMPLEMENTAR VENDER TODAS AS CASAS/HOTÉIS PARA O BANCO---------------------------------------------------------------------------
-                    jogador.pagar(this.preco);
-                    this.dono.receber(this.preco);
-                    this.dono.venderPropriedade(this);
-                    jogador.comprarPropriedade(this);
-                    this.dono = jogador;
-                } else {
-                    JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " recusou sua proposta.");
-                }
             } else {
                 JOptionPane.showMessageDialog(null,jogador.getNome() + " desistiu da compra.");
             }
@@ -177,6 +199,8 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
             JOptionPane.showMessageDialog(null,jogador.getNome()+" encerrou o Turno.");
         }
     }
+
+    
     private void comprarCasas(JogadorHumano jogador) {
         if (ControlBancoImobiliario.getInstance().validarConstrucaoCasa(jogador, this)) {
             if (this.numCasas < 4) {
