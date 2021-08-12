@@ -30,7 +30,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 	private Map<Integer, JogadorHumano> jogadoresAtivos;
 	private Map<Integer,JogadorHumano> jogadoresPresos;
 	private Tabuleiro tabuleiro;
-	private Dado[] dados = {new Dado(), new Dado()};
+	protected Dado[] dados = {new Dado(), new Dado()};
 	private TelaPrincipal telaPrincipal;
 
 	private int numJogadores;
@@ -114,35 +114,10 @@ public class ControlBancoImobiliario implements ObserverJogador {
         }
 	}
 
-	private void jogadorPresoRealizaTurno(JogadorHumano jogador) {
-        if (jogador.getCartaPrisao() != null) {
-            jogador.setCartaPrisao(null);
-            this.soltarJogador(jogador);
-            jogador.getFichaCriminal().setRodadasPreso(0);
-            this.alterarPosicaoDoJogador(jogador);
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " saiu da Prisão (Carta Coringa)");
-        } else if (this.dados[0].obterValorDaFace() == this.dados[1].obterValorDaFace()) {
-            this.soltarJogador(jogador);
-            jogador.getFichaCriminal().setRodadasPreso(0);
-            this.alterarPosicaoDoJogador(jogador);
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " saiu da Prisão (Dados Iguais)");
-
-        } else if (jogador.getFichaCriminal().getRodadasPreso() >= 3) {
-        	if (jogador.pagarCredor(50)) {
-				Banco.getInstance().receber(50);
-				this.soltarJogador(jogador);
-				jogador.getFichaCriminal().setRodadasPreso(0);
-				this.alterarPosicaoDoJogador(jogador);
-				JOptionPane.showMessageDialog(null, jogador.getNome() + " saiu da Prisão (Pagou R$ 50,00 ao Banco)");
-			}
-        } else {
-            int delitos = jogador.getFichaCriminal().getRodadasPreso() + 1;
-            System.out.println(delitos + " - " + jogador.getNome());
-            jogador.getFichaCriminal().setRodadasPreso(delitos);
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " continuará Preso");
-        }
+	private void jogadorPresoRealizaTurno(JogadorHumano jogador){
+		ControlPrisao controlPrisao = new ControlPrisao(jogador, this);
+		controlPrisao.jogadorPresoRealizaTurno(jogador, this);
 	}
-
 
 	private void jogadorRealizaTurno(JogadorHumano jogador) {
 		if (jogador.getFichaCriminal().getNumDelitos()>=3){
@@ -160,7 +135,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 		}
 	}
 
-	private Campo alterarPosicaoDoJogador(JogadorHumano jogador) {
+	protected Campo alterarPosicaoDoJogador(JogadorHumano jogador) {
 		int valorDados = jogador.getDados()[0].obterValorDaFace() + jogador.getDados()[1].obterValorDaFace();
 
         jogador.getPeca().obterLocalizacao().removerJogador(jogador); //Remove o jogador do campo em que ele estava
