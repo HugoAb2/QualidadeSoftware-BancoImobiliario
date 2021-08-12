@@ -200,9 +200,12 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    
+    private boolean validarConstrucaoCasa(JogadorHumano jogador){
+        return ControlBancoImobiliario.getInstance().validarConstrucaoCasa(jogador, this);
+    }
+
     private void comprarCasas(JogadorHumano jogador) {
-        if (ControlBancoImobiliario.getInstance().validarConstrucaoCasa(jogador, this)) {
+        if (validarConstrucaoCasa(jogador)) {
             if (this.numCasas < 4) {
                 if (jogador.pagar(this.precoCasa)) {
                     JOptionPane.showMessageDialog(null,jogador.getNome()+" construiu uma casa.");
