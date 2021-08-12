@@ -65,16 +65,22 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
+    public RealizarConstrucao construir() {
+        RealizarConstrucao construir = new RealizarConstrucao(((JogadorHumano)this.dono).getNome()+" - Essa Propriedade é sua",  this.getNome(), "Saldo R$" + this.dono.getContaBancaria().getSaldo());
+        construir.setVisible(true);
+
+        return construir;
+    }
+
     public void acoesProprietario () {
-        RealizarConstrucao constuir = new RealizarConstrucao(((JogadorHumano)this.dono).getNome()+" - Essa Propriedade Ã© sua",  this.getNome(), "Saldo R$" + this.dono.getContaBancaria().getSaldo());
-        constuir.setVisible(true);
+        RealizarConstrucao constuir = construir();
 
         if (constuir.isConstuir()) {
             if (!this.hasHotel) {
                 System.out.println("Implementar");
                 this.comprarCasas((JogadorHumano) this.dono);
             } else {
-                JOptionPane.showMessageDialog(null, ((JogadorHumano)this.dono).getNome()+" NÃ£o pode mais construir nesse Terreno");
+                JOptionPane.showMessageDialog(null, ((JogadorHumano)this.dono).getNome()+" Não pode mais construir nesse Terreno");
             }
         } else {
             System.out.println();
