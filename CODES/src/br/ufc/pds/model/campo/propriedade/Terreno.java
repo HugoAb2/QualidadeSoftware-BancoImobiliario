@@ -141,8 +141,8 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    private void acoesComprador(JogadorHumano jogador) {
-        String titulo = jogador.getNome() + " alcan√ßou " + this.nome;
+    private ComprarPropriedade criarComprarPropriedade(JogadorHumano jogador) {
+        String titulo = jogador.getNome() + " alcanÁou " + this.nome;
         String aluguel = "Aluguel: R$ "+this.aluguel;
         String valor = "Valor: R$ "+this.preco;
         String saldo = "Seu Saldo: R$ " + jogador.getContaBancaria().getSaldo();
@@ -153,6 +153,13 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         ComprarPropriedade cp = new ComprarPropriedade(titulo, aluguel, valor, saldo, numPropriedades, dado1, dado2);
 
         cp.setVisible(true);
+
+        return cp;
+    }
+
+    private void acoesComprador(JogadorHumano jogador) {
+        ComprarPropriedade cp = criarComprarPropriedade(jogador);
+
         boolean comprar = cp.getComprar();
 
         if (comprar) {
@@ -163,14 +170,13 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
                 jogador.comprarPropriedade(this);
                 this.dono = jogador;
             } else {
-                JOptionPane.showMessageDialog(null,jogador.getNome()+"  n√£o tem dinheiro suficiente para comprar essa propriedade.");
+                JOptionPane.showMessageDialog(null,jogador.getNome()+"  n„o tem dinheiro suficiente para comprar essa propriedade.");
             }
 
         } else {
             JOptionPane.showMessageDialog(null,jogador.getNome()+" encerrou o Turno.");
         }
     }
-
     private void comprarCasas(JogadorHumano jogador) {
         if (ControlBancoImobiliario.getInstance().validarConstrucaoCasa(jogador, this)) {
             if (this.numCasas < 4) {
