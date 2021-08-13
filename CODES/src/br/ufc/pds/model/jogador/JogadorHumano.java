@@ -84,6 +84,14 @@ public class JogadorHumano extends Jogador implements SubjectObserver {
 		return fichaCriminal;
 	}
 
+	public void atualizaFichaCriminal(JogadorHumano jogador, boolean dadosIguais, boolean jogadorAtivo){
+		if(dadosIguais && jogadorAtivo){
+			jogador.getFichaCriminal().setNumDelitos(jogador.getFichaCriminal().getNumDelitos()+1);
+		}else{
+			jogador.getFichaCriminal().setNumDelitos(0);
+		}
+	}
+
     @Override
     public void addObserver(ObserverJogador o) {
         this.observerCollection.add(o);

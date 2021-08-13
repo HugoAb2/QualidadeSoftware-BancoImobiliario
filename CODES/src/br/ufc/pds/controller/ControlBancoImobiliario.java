@@ -150,20 +150,32 @@ public class ControlBancoImobiliario implements ObserverJogador {
         return proximoCampo;
     }
 
+    private boolean compararDadosIguais(JogadorHumano jogador){
+		if(jogador.getDados()[0].obterValorDaFace() == jogador.getDados()[1].obterValorDaFace()){
+			return true;
+		}
+		return false;
+	}
+
+	private void setJogadorDaVez(JogadorHumano jogador){
+		JogadorDaVez jdv = new JogadorDaVez(jogador.getNome() + " Jogando (Dados Iguais)", "Propriedades: " + jogador.getPropriedades().size(), "Saldo: R$ " + jogador.getContaBancaria().getSaldo(), "Status: Jogador Livre");
+		jdv.setVisible(true);
+	}
+
+    //FAZER QUANDO ACORDAR
 	private void executaAcaoCampo(EfeitoEspecial campo, JogadorHumano jogador) {
-		if (campo!=null) {
+		if (campo != null) {
 			campo.aplicarEfeito(jogador);
 
-			if (jogador.getDados()[0].obterValorDaFace() == jogador.getDados()[1].obterValorDaFace() && this.jogadoresAtivos.containsValue(jogador)){
-				JogadorDaVez jdv = new JogadorDaVez(jogador.getNome() + " Jogando (Dados Iguais)", "Propriedades: " + jogador.getPropriedades().size(), "Saldo: R$ " + jogador.getContaBancaria().getSaldo(), "Status: Jogador Livre");
-				jdv.setVisible(true);
+			if (compararDadosIguais(jogador) && this.jogadoresAtivos.containsValue(jogador)){
+				setJogadorDaVez(jogador);
 				jogador.lancarDados();
-				jogador.getFichaCriminal().setNumDelitos(jogador.getFichaCriminal().getNumDelitos()+1);
+				jogador.atualizaFichaCriminal(jogador, compararDadosIguais(jogador), this.jogadoresAtivos.containsValue(jogador));
 				this.jogadorRealizaTurno(jogador);
 
 			} else {
-				jogador.getFichaCriminal().setNumDelitos(0);
-			}
+                jogador.atualizaFichaCriminal(jogador, compararDadosIguais(jogador), this.jogadoresAtivos.containsValue(jogador));
+            }
 		}
 	}
 
