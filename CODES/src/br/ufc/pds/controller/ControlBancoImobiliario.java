@@ -162,7 +162,6 @@ public class ControlBancoImobiliario implements ObserverJogador {
 		jdv.setVisible(true);
 	}
 
-    //FAZER QUANDO ACORDAR
 	private void executaAcaoCampo(EfeitoEspecial campo, JogadorHumano jogador) {
 		if (campo != null) {
 			campo.aplicarEfeito(jogador);
@@ -262,29 +261,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 			this.jogadoresAtivos.remove(jogador.getId());
 			jogador.getPeca().obterLocalizacao().removerJogador(jogador);
 		} else {
-			for (Propriedade propriedade: jogador.getPropriedades()) {
-                if (propriedade instanceof Terreno) {
-                    if (((Terreno) propriedade).isHasHotel()) {
-                        propriedadesVendidas += ((4 * ((Terreno) propriedade).getPrecoCasa() + ((Terreno) propriedade).getPrecoHotel())/2);
-                        propriedadesVendidas += propriedade.getPreco();
-                    } else {
-                        propriedadesVendidas += ((((Terreno) propriedade).getNumCasas() * ((Terreno) propriedade).getPrecoCasa())/2);
-                        propriedadesVendidas += propriedade.getPreco();
-                        System.out.println("Sem Hotel: "+propriedadesVendidas);
-                    }
-                } else {
-                    propriedadesVendidas += propriedade.getPreco();
-                }
-                JOptionPane.showMessageDialog(null, jogador.getNome()+" vendeu "+propriedade.getNome()+" por "+propriedadesVendidas+" para pagar suas dívidas");
-                if (propriedadesVendidas >= valor) {
-                    Banco.getInstance().pagar(propriedadesVendidas);
-                    jogador.receber(propriedadesVendidas);
-                    JOptionPane.showMessageDialog(null, jogador.getNome()+" pagou sua dívida e continua no jogo!");
-                    break;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Dinheiro Insificiente Para Pagar O Credor");
-                }
-			}
+            ControlPagamentos.pagarDividas(jogador, propriedadesVendidas, valor);
 		}
 		if (this.jogadoresAtivos.size() == 1) {
             JOptionPane.showMessageDialog(null, "<Alguém> ganhou essa partida");
