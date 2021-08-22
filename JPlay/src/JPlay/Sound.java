@@ -116,20 +116,45 @@ public class Sound
     {
             byte tempBuffer[] = new byte[1000];
 
+            private int readAudio(AudioInputStream audioInputStream){
+                try {
+                    int count = audioInputStream.read(tempBuffer, 0, tempBuffer.length);
+                    return count;
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+
+            private void mudarVolume(FloatControl volControl){
+                volControl.setValue(volume);
+            }
+
+            private void initSource(SourceDataLine sourceDataLine){
+                try {
+                    sourceDataLine.open(audioFormat);
+                    sourceDataLine.start();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            private FloatControl getController(){
+                return (FloatControl) sourceDataLine.getControl(FloatControl.Type.MASTER_GAIN);
+            }
+
             @Override
             public void run()
             {
                 try
                 {
-                        sourceDataLine.open(audioFormat);
-                        sourceDataLine.start();
-
+                        initSource(sourceDataLine);
                         //while there are dates to execute and stop == false
                         int count = 0;
                         while( count != -1 && stop == false)
                         {
                                 if( pause == false )
-                                    count = audioInputStream.read(tempBuffer,0,tempBuffer.length);
+                                    count = readAudio(audioInputStream);
                                 else
                                     count = 0;
 
@@ -138,8 +163,8 @@ public class Sound
                                 {
                                     if (volumeChanged)
                                     {
-                                            FloatControl volControl = (FloatControl) sourceDataLine.getControl(FloatControl.Type.MASTER_GAIN);
-                                            volControl.setValue(volume);
+                                            FloatControl volControl = getController();
+                                            mudarVolume(volControl);
                                             volumeChanged = false;
                                     }
                                     sourceDataLine.write(tempBuffer, 0, count);
