@@ -10,14 +10,10 @@
 
 package JPlay;
 
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
-
-class BaseSprite
+class BaseSprite extends Animation
 {
     double velocityY     = 1;
-    double jumpVelocity  = 5.3; //It's used for the jump,
+    double jumpVelocity  = 5.3;//It's used for the jump,
 
     double gravity     = 0.098;
     boolean onFloor    = false;
@@ -28,26 +24,6 @@ class BaseSprite
     public static char RIGHT = 'R';
     public static char UPWARD = 'U';
     public static char DOWNWARD = 'D';
-    
-    private int initialFrame;
-    private int finalFrame;
-    private int currAnimFrame;
-    private boolean animationFinished;
-    public int width;
-    public int height;
-    protected Image image;
-    public double x;
-    public double y;
-
-    private boolean repeatAnimation;
-
-    private boolean canDraw;
-
-    //Each frame has its own time
-    private long timeEachFrame[];
-
-    //It keeps the time when a frame was changed
-    private long lastTime;
 
     char stateX;
     char stateY;
@@ -56,19 +32,12 @@ class BaseSprite
 
     public BaseSprite(String fileName)
     {
-    		loadImage(fileName);
-            this.width = image.getWidth(null);
-            this.height = image.getHeight(null);
-           
-            this.canDraw = true;
-            this.repeatAnimation = true;
-            this.finalFrame = 1;
-            this.initialFrame = 0;
-            this.currAnimFrame = 0;
-            timeEachFrame = new long[1];
-            setTimeChangeFrame(70);
-            lastTime = System.currentTimeMillis();
-            this.animationFinished = false;
+            this(fileName, 1);
+    }
+
+    public BaseSprite(String fileName, int numFrames)
+    {
+            super(fileName, numFrames);
     }
 
     public void setFloor(int floor)
@@ -173,19 +142,5 @@ class BaseSprite
     public void setStateOfY(char state)
     {
             this.stateY = state;
-    }
-    
-    public void setTimeChangeFrame(long timeChangeFrame)
-    {
-            for(int i=0; i < timeEachFrame.length; i++)
-                timeEachFrame[i] = timeChangeFrame;
-    }
-
-    public void loadImage(String fileName)
-    {
-            ImageIcon icon = new ImageIcon(fileName);
-            this.image = icon.getImage();
-            this.width = image.getWidth(null);
-            this.height = image.getHeight(null);
     }
 }
