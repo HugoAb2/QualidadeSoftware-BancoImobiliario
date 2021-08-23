@@ -114,6 +114,10 @@ public class ControlBancoImobiliario implements ObserverJogador {
         }
 	}
 
+	protected Tabuleiro getTabuleiro(){
+		return tabuleiro;
+	}
+
 	private void jogadorPresoRealizaTurno(JogadorHumano jogador){
 		ControlPrisao controlPrisao = new ControlPrisao(jogador, this);
 		controlPrisao.jogadorPresoRealizaTurno(jogador, this);
@@ -135,20 +139,12 @@ public class ControlBancoImobiliario implements ObserverJogador {
 		}
 	}
 
-	protected Campo alterarPosicaoDoJogador(JogadorHumano jogador) {
-		int valorDados = jogador.getDados()[0].obterValorDaFace() + jogador.getDados()[1].obterValorDaFace();
-
-        jogador.getPeca().obterLocalizacao().removerJogador(jogador); //Remove o jogador do campo em que ele estava
-
-        Campo proximoCampo = this.tabuleiro.obterProximoCampo(jogador.getPeca().obterLocalizacao(), valorDados);
-        jogador.getPeca().mudarLocalizacao(proximoCampo);
-        Teste.informaAvancoJogador(jogador);//remover-------------------------------------------
-
-        jogador.getPeca().obterLocalizacao().addJogador(jogador); //Adiciona o jogador no Campo Atual
-        this.renderizarTelaPrincipal(); // Atualiza posição do jogador no Tabuleiro
-
-        return proximoCampo;
-    }
+	protected Campo alterarPosicaoDoJogador(JogadorHumano jogador){
+		ControlCampos controlCampos = new ControlCampos(jogador, this);
+		Campo campo = controlCampos.alterarPosicaoDoJogador(jogador);
+		Teste.informaAvancoJogador(jogador);//remover-------------------------------------------
+		return campo;
+	}
 
     private boolean compararDadosIguais(JogadorHumano jogador){
 		if(jogador.getDados()[0].obterValorDaFace() == jogador.getDados()[1].obterValorDaFace()){

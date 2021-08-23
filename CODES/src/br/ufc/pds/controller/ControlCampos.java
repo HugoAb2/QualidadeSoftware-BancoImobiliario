@@ -1,11 +1,13 @@
 package br.ufc.pds.controller;
 
+import br.ufc.pds.model.Peca;
 import br.ufc.pds.model.campo.Campo;
 import br.ufc.pds.model.campo.propriedade.Compania;
 import br.ufc.pds.model.campo.propriedade.Terreno;
 import br.ufc.pds.model.jogador.Banco;
 import br.ufc.pds.model.jogador.Jogador;
 import br.ufc.pds.factory.FactoryCampoEspecial;
+import br.ufc.pds.model.jogador.JogadorHumano;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +16,13 @@ public class ControlCampos {
 
     Map<Integer, Campo> campos = new HashMap<>();
     Jogador dono = Banco.getInstance();
+    JogadorHumano jogador;
+    ControlBancoImobiliario controller;
 
-    public ControlCampos() {
-
+    public ControlCampos(){}
+    public ControlCampos(JogadorHumano jogador, ControlBancoImobiliario controller) {
+        this.jogador = jogador;
+        this.controller = controller;
     }
 
     private void inserirTerreno(int instance, String nome, int indice, Jogador dono, float preco, String cor, float aluguel, float precoCasa, float precoHotel, float aluguel1Casas, float aluguel2Casas, float aluguel3Casas, float aluguel4Casas, float aluguelHotel, int eixoX, int eixoY  ){
@@ -87,4 +93,31 @@ public class ControlCampos {
 
         return campos;
     }
+
+    private int valorDados(JogadorHumano jogador){ return jogador.getDados()[0].obterValorDaFace() + jogador.getDados()[1].obterValorDaFace();}
+
+    private Peca getPeca(JogadorHumano jogador){ return jogador.getPeca(); }
+
+    private Campo obterLocalizacao(Peca peca){ return peca.obterLocalizacao(); }
+
+    private void removerJogador(Campo campo, JogadorHumano jogador){ campo.removerJogador(jogador); }
+
+    private void mudarLocalizacao(Peca peca, Campo campo){ peca.mudarLocalizacao(campo); }
+
+    private void addJogador(Campo campo, JogadorHumano jogador){ campo.addJogador(jogador); }
+
+    protected Campo alterarPosicaoDoJogador(JogadorHumano jogador) {
+        int valorDados = valorDados(jogador);
+
+        removerJogador(obterLocalizacao(getPeca(jogador)), jogador); //Remove o jogador do campo em que ele estava
+
+        Campo proximoCampo = controller.getTabuleiro().obterProximoCampo(obterLocalizacao(getPeca(jogador)), valorDados);
+        mudarLocalizacao(getPeca(jogador), proximoCampo);
+
+        addJogador(obterLocalizacao(getPeca(jogador)), jogador); //Adiciona o jogador no Campo Atual
+        controller.renderizarTelaPrincipal(); // Atualiza posição do jogador no Tabuleiro
+
+        return proximoCampo;
+    }
+
 }
