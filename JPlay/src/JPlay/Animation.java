@@ -10,12 +10,21 @@
 
 package JPlay;
 
-public class Animation extends GameImage
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
+public class Animation
 {              
     private int initialFrame;
     private int finalFrame;
     private int currAnimFrame;
     private boolean animationFinished;
+    public int width;
+    public int height;
+    protected Image image;
+    public double x;
+    public double y;
 
     private boolean repeatAnimation;
 
@@ -29,7 +38,7 @@ public class Animation extends GameImage
 
     public Animation(String fileName, int numFrames)
     {
-            super(fileName);
+    		loadImage(fileName);
             this.width = image.getWidth(null) / numFrames;
             this.height = image.getHeight(null);
            
@@ -161,7 +170,6 @@ public class Animation extends GameImage
             this.canDraw = true;
     }
 
-    @Override
     public void draw()
     {
             if (canDraw)
@@ -170,5 +178,13 @@ public class Animation extends GameImage
                     .drawImage(image, (int)x, (int)y, (int)x + width, (int)y + height,
                         currAnimFrame * width, 0, (currAnimFrame +1) * width, height, null);
             }
+    }
+    
+    public void loadImage(String fileName)
+    {
+            ImageIcon icon = new ImageIcon(fileName);
+            this.image = icon.getImage();
+            this.width = image.getWidth(null);
+            this.height = image.getHeight(null);
     }
 }
