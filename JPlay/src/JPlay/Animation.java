@@ -10,21 +10,12 @@
 
 package JPlay;
 
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
-
-public class Animation
-{              
+public class Animation extends GameImage
+{
     private int initialFrame;
     private int finalFrame;
     private int currAnimFrame;
     private boolean animationFinished;
-    public int width;
-    public int height;
-    protected Image image;
-    public double x;
-    public double y;
 
     private boolean repeatAnimation;
 
@@ -38,90 +29,90 @@ public class Animation
 
     public Animation(String fileName, int numFrames)
     {
-    		loadImage(fileName);
-            this.width = image.getWidth(null) / numFrames;
-            this.height = image.getHeight(null);
-           
-            this.canDraw = true;
-            this.repeatAnimation = true;
-            this.finalFrame = numFrames;
-            this.initialFrame = 0;
-            this.currAnimFrame = 0;
-            timeEachFrame = new long[numFrames];
-            setTimeChangeFrame(70);
-            lastTime = System.currentTimeMillis();
-            this.animationFinished = false;
+        super(fileName);
+        this.width = image.getWidth(null) / numFrames;
+        this.height = image.getHeight(null);
+
+        this.canDraw = true;
+        this.repeatAnimation = true;
+        this.finalFrame = numFrames;
+        this.initialFrame = 0;
+        this.currAnimFrame = 0;
+        timeEachFrame = new long[numFrames];
+        setTimeChangeFrame(70);
+        lastTime = System.currentTimeMillis();
+        this.animationFinished = false;
     }
 
     public Animation(String fileName)
     {
-            this(fileName, 1);
+        this(fileName, 1);
     }
 
     public void setTimeOfFrame(int frame, long time)
     {
-            timeEachFrame[frame] = time;
+        timeEachFrame[frame] = time;
     }
 
     public long getTimeOfFrame(int frame)
     {
-            return timeEachFrame[frame];
+        return timeEachFrame[frame];
     }
 
     public void setRangeOfFrames(int initialFrame, int finalFrame)
     {
-            this.initialFrame = initialFrame;
-            this.currAnimFrame = initialFrame;
-            this.finalFrame = finalFrame;
+        this.initialFrame = initialFrame;
+        this.currAnimFrame = initialFrame;
+        this.finalFrame = finalFrame;
     }
 
     public void setRepeatAnimation(boolean value)
     {
-            this.repeatAnimation = value;
+        this.repeatAnimation = value;
     }
 
     public boolean getRepeatAnimation()
     {
-            return repeatAnimation;
+        return repeatAnimation;
     }
 
     public void setTimeChangeFrame(long timeChangeFrame)
     {
-            for(int i=0; i < timeEachFrame.length; i++)
-                timeEachFrame[i] = timeChangeFrame;
+        for(int i=0; i < timeEachFrame.length; i++)
+            timeEachFrame[i] = timeChangeFrame;
     }
 
     public long getTimeChangeFrame()
     {
-           return timeEachFrame[0];
+        return timeEachFrame[0];
     }
 
     public void runAnimation()
     {
-            long time = System.currentTimeMillis();
-            if ( time - lastTime > timeEachFrame[currAnimFrame] && finalFrame != 0)
-            {
-                currAnimFrame++;
-                lastTime = time;
-            }
-
-            animationFinished = true;
-            if (currAnimFrame == finalFrame && repeatAnimation)
-            {
-                currAnimFrame = initialFrame;
-            }
-            else
-                if( (!repeatAnimation) && (currAnimFrame+1 >= finalFrame) )
-                {
-                    currAnimFrame = finalFrame - 1;
-                }
-                else
-                    animationFinished = false;
+        long time = System.currentTimeMillis();
+        if ( time - lastTime > timeEachFrame[currAnimFrame] && finalFrame != 0)
+        {
+            currAnimFrame++;
+            lastTime = time;
         }
-   
+
+        animationFinished = true;
+        if (currAnimFrame == finalFrame && repeatAnimation)
+        {
+            currAnimFrame = initialFrame;
+        }
+        else
+        if( (!repeatAnimation) && (currAnimFrame+1 >= finalFrame) )
+        {
+            currAnimFrame = finalFrame - 1;
+        }
+        else
+            animationFinished = false;
+    }
+
     public void reset()
     {
-            this.currAnimFrame = initialFrame;
+        this.currAnimFrame = initialFrame;
     }
 
     public void setInitialFrame(int frame)
@@ -146,45 +137,38 @@ public class Animation
 
     public void setCurrFrame(int frame)
     {
-            currAnimFrame = frame;
+        currAnimFrame = frame;
     }
 
     public int getCurrFrame()
     {
-            return currAnimFrame;
+        return currAnimFrame;
     }
-    
+
     public boolean isAnimationFinished()
-    {   
+    {
         return animationFinished;
-            //return currAnimFrame == finalFrame;
+        //return currAnimFrame == finalFrame;
     }
 
     public void hide()
     {
-            this.canDraw = false;
+        this.canDraw = false;
     }
 
     public void unhide()
     {
-            this.canDraw = true;
+        this.canDraw = true;
     }
 
+    @Override
     public void draw()
     {
-            if (canDraw)
-            {
-                Window.instance.getGameGraphics()
+        if (canDraw)
+        {
+            Window.instance.getGameGraphics()
                     .drawImage(image, (int)x, (int)y, (int)x + width, (int)y + height,
-                        currAnimFrame * width, 0, (currAnimFrame +1) * width, height, null);
-            }
-    }
-    
-    public void loadImage(String fileName)
-    {
-            ImageIcon icon = new ImageIcon(fileName);
-            this.image = icon.getImage();
-            this.width = image.getWidth(null);
-            this.height = image.getHeight(null);
+                            currAnimFrame * width, 0, (currAnimFrame +1) * width, height, null);
+        }
     }
 }
