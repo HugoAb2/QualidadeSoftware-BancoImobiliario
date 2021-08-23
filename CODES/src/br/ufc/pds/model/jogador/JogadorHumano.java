@@ -41,11 +41,11 @@ public class JogadorHumano extends Jogador implements SubjectObserver {
 
 	public boolean pagarCredor(float valor) {
 		System.out.println("Saldo antes R$:" + this.contaBancaria.getSaldo());
-	    if (this.getContaBancaria().getSaldo() < valor) {
+	    if (this.getConta().getSaldo() < valor) {
             this.notifyObserver(valor);
         }
         System.out.println("Saldo depois R$:" + this.contaBancaria.getSaldo());
-        return this.pagar(valor);
+        return this.getConta().pagar(valor);
     }
 
 	public String getNome() {

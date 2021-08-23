@@ -18,7 +18,7 @@ public class PontoDePartida extends CampoEspecial implements EfeitoEspecial {
 
 		//System.out.println(jogador.getNome() +  " ganhou R$ 200");
 		Banco.getInstance().pagar(200);
-		jogador.receber(200);
+		jogador.receberCredor(200);
 	}
 
 }

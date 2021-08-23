@@ -18,6 +18,10 @@ public abstract class Jogador {
 		this.contaBancaria.receber(valor);
 	}
 
+	public void receberCredor(float valor) {
+		this.contaBancaria.receber(valor);
+	}
+
 	public void comprarPropriedade(Propriedade propriedade) {
 		this.propriedades.add(propriedade);
 	}
@@ -28,6 +32,14 @@ public abstract class Jogador {
 
 	public ContaBancaria getContaBancaria() {
 		return this.contaBancaria;
+	}
+
+	public ContaBancaria getConta() {
+		return this.contaBancaria;
+	}
+
+	public float getSaldo(){
+		return this.contaBancaria.getSaldo();
 	}
 
 	public ArrayList<Propriedade> getPropriedades() {

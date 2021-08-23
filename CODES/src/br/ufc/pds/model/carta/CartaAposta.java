@@ -21,7 +21,7 @@ public class CartaAposta extends Carta {
 		listaJogadores.forEach((key, value) -> {
 			if (jogador != value) {
 				if (value.pagarCredor(this.valor)){
-					jogador.receber(this.valor);
+					jogador.receberCredor(this.valor);
 				}
 			}
 		});

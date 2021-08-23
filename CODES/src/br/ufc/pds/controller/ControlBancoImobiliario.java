@@ -98,12 +98,12 @@ public class ControlBancoImobiliario implements ObserverJogador {
                 JogadorDaVez jdv;
 
                 if (!(this.getJogadoresPresos().containsValue(value))) {
-                    jdv = new JogadorDaVez(value.getNome() + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getContaBancaria().getSaldo(), "Status: Jogador Livre");
+                    jdv = new JogadorDaVez(value.getNome() + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getSaldo(), "Status: Jogador Livre");
                     jdv.setVisible(true);
                     value.lancarDados();
                     this.jogadorRealizaTurno(value);
                 } else {
-                    jdv = new JogadorDaVez(value.getNome() + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getContaBancaria().getSaldo(), "Status: Jogador Preso");
+                    jdv = new JogadorDaVez(value.getNome() + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getSaldo(), "Status: Jogador Preso");
                     jdv.setVisible(true);
                     value.lancarDados();
                     this.jogadorPresoRealizaTurno(value);
@@ -158,7 +158,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 	}
 
 	private void setJogadorDaVez(JogadorHumano jogador){
-		JogadorDaVez jdv = new JogadorDaVez(jogador.getNome() + " Jogando (Dados Iguais)", "Propriedades: " + jogador.getPropriedades().size(), "Saldo: R$ " + jogador.getContaBancaria().getSaldo(), "Status: Jogador Livre");
+		JogadorDaVez jdv = new JogadorDaVez(jogador.getNome() + " Jogando (Dados Iguais)", "Propriedades: " + jogador.getPropriedades().size(), "Saldo: R$ " + jogador.getSaldo(), "Status: Jogador Livre");
 		jdv.setVisible(true);
 	}
 

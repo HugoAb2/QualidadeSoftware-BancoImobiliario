@@ -17,8 +17,8 @@ public class LucrosDividendos extends CampoEspecial implements EfeitoEspecial {
 		this.showMensagem(titulo, acao);
 
 		//System.out.println(jogador.getNome() + " recebeu R$ 200");
-		Banco.getInstance().pagar(200);
-		jogador.receber(200);
+		Banco.getInstance().getConta().pagar(200);
+		jogador.receberCredor(200);
 	}
 
 }

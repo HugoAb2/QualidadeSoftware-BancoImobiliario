@@ -39,7 +39,7 @@ public class ControlPrisao {
     }
     protected void sairDaPrisaoPaga(JogadorHumano jogador){
         if (jogador.pagarCredor(50)) {
-            Banco.getInstance().receber(50);
+            Banco.getInstance().receberCredor(50);
             controler.soltarJogador(jogador);
             jogador.getFichaCriminal().setRodadasPreso(0);
             controler.alterarPosicaoDoJogador(jogador);

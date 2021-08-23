@@ -10,8 +10,8 @@ import javax.swing.*;
 public class ControlPagamentos {
 
     protected static void pagamento(float propriedadesVendidas, JogadorHumano jogador){
-        Banco.getInstance().getContaBancaria().pagar(propriedadesVendidas);
-        jogador.receber(propriedadesVendidas);
+        Banco.getInstance().getConta().pagar(propriedadesVendidas);
+        jogador.receberCredor(propriedadesVendidas);
     }
 
     protected static float verifyPropriedade(Propriedade propriedade, float propriedadesVendidas){

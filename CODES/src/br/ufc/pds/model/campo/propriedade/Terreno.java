@@ -106,7 +106,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
 
             try {
                 valorProposto = Float.parseFloat(proposta.getValorProposto());
-                if (valorProposto > jogador.getContaBancaria().getSaldo()) {
+                if (valorProposto > jogador.getSaldo()) {
                     JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " seu saldo é insuficiente.");
                     continue;
                 }

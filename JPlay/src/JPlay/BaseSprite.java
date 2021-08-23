@@ -28,7 +28,7 @@ class BaseSprite extends Animation
     char stateX;
     char stateY;
 
-    public static Keyboard keyboard = Window.instance.getKeyboard();
+    protected static Keyboard keyboard = Window.instance.getKeyboard();
 
     public BaseSprite(String fileName)
     {

@@ -17,7 +17,7 @@ public class ImpostoDeRenda extends CampoEspecial implements EfeitoEspecial {
         this.showMensagem(titulo, acao);
 
         if (jogador.pagarCredor(200)) {
-            Banco.getInstance().receber(200);
+            Banco.getInstance().receberCredor(200);
         }
     }
 }
