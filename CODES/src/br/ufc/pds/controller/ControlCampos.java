@@ -45,7 +45,7 @@ public class ControlCampos {
     }
 
     private void inserirCompania(int instance, String nome, int indice, float preco, Jogador dono, float taxa, int eixoX, int eixoY){
-        campos.put(6, new Compania("COMPANIA FERROVIÁRIA", 6, 200, dono, 50, 339, 631  ));
+        campos.put(instance, new Compania(nome, indice, preco, dono, taxa, eixoX, eixoY));
     }
 
     public Map criarCampos() {
