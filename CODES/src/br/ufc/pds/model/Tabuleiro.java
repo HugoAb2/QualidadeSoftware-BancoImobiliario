@@ -20,11 +20,17 @@ public class Tabuleiro {
         return campos.get(1);
     }
 
+    private int getIndice(Campo campo){ return campo.getIndice();}
+
+    private Campo getCampo(Campo inicio, int distancia){
+        return campos.get(getIndice(inicio)+distancia);
+    }
+
     public Campo obterProximoCampo(Campo inicio, int distancia) {
-        if (inicio.getIndice() + distancia > 40) {
-            return campos.get(inicio.getIndice()+distancia-this.qtdCampos);
+        if (getIndice(inicio) + distancia > 40) {
+            return campos.get(getIndice(inicio)+distancia-this.qtdCampos);
         }
-        return campos.get(inicio.getIndice()+distancia);
+        return getCampo(inicio,distancia);
     }
 
     public void criarCampos() {
