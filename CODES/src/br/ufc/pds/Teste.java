@@ -6,20 +6,19 @@ import java.util.Scanner;
 
 public class Teste {
 
+    private static Scanner input = new Scanner(System.in);
+
     public static String nomeJogador(int index) {
-        Scanner input = new Scanner(System.in);
         System.out.println("Qual o nome do Jogador " + index + "?");
         return input.nextLine();
     }
 
     public static int numJogadores() {
-        Scanner input = new Scanner(System.in);
         System.out.println("Qual a quantidade de Jogadores? Min 2 e Max 6");
         return  Integer.parseInt(input.nextLine());
     }
 
     public static void esperaQualquer() {
-        Scanner input = new Scanner(System.in);
         System.out.println("Aperte Enter");
         String t = input.nextLine();
     }
@@ -31,27 +30,32 @@ public class Teste {
         System.out.println();
     }
 
+    private static int strToInt(String txt){
+        return Integer.parseInt(txt);
+    }
+
+    private static void sysMsg(String msg){
+        System.out.println(msg);
+    }
+
     public static int opcaoDoJogadorPropriedadeSemDono() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Escolha: ");
-        System.out.println("1- Comprar Propriedade;");
-        System.out.println("0- Encerrar Turno");
-        return  Integer.parseInt(input.nextLine());
+        sysMsg("Escolha: ");
+        sysMsg("1- Comprar Propriedade;");
+        sysMsg("0- Encerrar Turno");
+        return strToInt(input.nextLine());
     }
 
     public static int opcaoDoJogadorPropriedadeComDono() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Escolha: ");
-        System.out.println("1- Fazer uma Oferta pela Propriedade;");
-        System.out.println("0- Encerrar Turno");
-        return  Integer.parseInt(input.nextLine());
+        sysMsg("Escolha: ");
+        sysMsg("1- Fazer uma Oferta pela Propriedade;");
+        sysMsg("0- Encerrar Turno");
+        return  strToInt(input.nextLine());
     }
 
     public static boolean pedidoDeCompra(float valor) {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Deseja Vender a Propriedade por R$" + valor + "?\nEscolha:");
-        System.out.println("1- Sim.");
-        System.out.println("0- Não.");
+        sysMsg("Deseja Vender a Propriedade por R$" + valor + "?\nEscolha:");
+        sysMsg("1- Sim.");
+        sysMsg("0- Não.");
         if (input.nextInt() == 1)
             return true;
         return false;
