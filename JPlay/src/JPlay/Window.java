@@ -10,13 +10,7 @@
 
 package JPlay;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,10 +118,15 @@ public class Window extends JFrame
     public Cursor createCustomCursor(String imageName)
     {
             Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(
-                                    Toolkit.getDefaultToolkit().getImage(imageName),
+                                    getImage(imageName),
                                     new java.awt.Point(),
                                     "cursor");
             return cursor;
+    }
+
+
+    private Image getImage(String imageName){
+        return Toolkit.getDefaultToolkit().getImage(imageName);
     }
 
     public void clear()
