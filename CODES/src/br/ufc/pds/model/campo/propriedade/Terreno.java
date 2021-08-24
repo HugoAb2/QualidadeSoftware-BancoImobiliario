@@ -9,20 +9,22 @@ import br.ufc.pds.model.jogador.JogadorHumano;
 import br.ufc.pds.view.*;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Terreno extends Propriedade implements EfeitoEspecial {
 
-	private String cor;
-	private float aluguel;
-	private int numCasas;
-	private float precoCasa;
-	private float precoHotel;
-	private boolean hasHotel;
-	private float aluguel1Casas;
-	private float aluguel2Casas;
-	private float aluguel3Casas;
-	private float aluguel4Casas;
-	private float aluguelHotel;
+    Proprietario proprietario = new Proprietario(this);
+	protected String cor;
+	protected float aluguel;
+	protected int numCasas;
+	protected float precoCasa;
+	protected float precoHotel;
+	protected boolean hasHotel;
+	protected float aluguel1Casas;
+	protected float aluguel2Casas;
+	protected float aluguel3Casas;
+	protected float aluguel4Casas;
+	protected float aluguelHotel;
 
 	public Terreno(String nome, int indice, Jogador dono, float preco, String cor, float aluguel, float precoCasa, float precoHotel, float aluguel1Casas, float aluguel2Casas, float aluguel3Casas, float aluguel4Casas, float aluguelHotel, int eixoX, int eixoY) {
         super(nome, indice, preco, dono, eixoX, eixoY);
@@ -39,7 +41,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
 		this.aluguelHotel = aluguelHotel;
 	}
 
-	public float getAluguel() {
+    public float getAluguel() {
 	    if (this.hasHotel) {
 	        return this.aluguelHotel;
         } else if (this.numCasas == 1) {
@@ -58,7 +60,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
     @Override
     public void aplicarEfeito(JogadorHumano jogador) {
 	    if (this.dono == jogador) {
-	        this.acoesProprietario();
+	        proprietario.acoesProprietario();
         } else if (this.dono == Banco.getInstance()) {
 	        this.acoesComprador(jogador);
         } else {
@@ -66,42 +68,19 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    public RealizarConstrucao construir() {
-        RealizarConstrucao construir = new RealizarConstrucao(getNomeDono(((JogadorHumano)this.dono))+" - Essa Propriedade é sua",  this.getNome(), "Saldo R$" + this.dono.getContaBancaria().getSaldo());
-        construir.setVisible(true);
-
-        return construir;
-    }
-
-    public void acoesProprietario () {
-        RealizarConstrucao constuir = construir();
-
-        if (constuir.isConstuir()) {
-            if (!this.hasHotel) {
-                System.out.println("Implementar");
-                this.comprarCasas((JogadorHumano) this.dono);
-            } else {
-                JOptionPane.showMessageDialog(null, getNomeDono(((JogadorHumano)this.dono))+" Não pode mais construir nesse Terreno");
-            }
-        } else {
-            System.out.println();
-            JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono))+" encerrou o Turno.");
-        }
-    }
-
-    private boolean verifyPCP(JogadorHumano jogador, FazerPropostaCompraPropriedade pcp){
+    protected boolean verifyPCP(FazerPropostaCompraPropriedade pcp){
 	    return pcp.getComprar();
     }
 
-    private void setVisible(FazerPropostaCompraPropriedade pcp){
+    protected void setVisible(FazerPropostaCompraPropriedade pcp){
 	    pcp.setVisible(true);
     }
 
-    private boolean isCancelar(InserirProposta proposta){
+    protected boolean isCancelar(InserirProposta proposta){
 	    return proposta.isCancelar();
     }
 
-    private float fazerProposta(JogadorHumano jogador, InserirProposta proposta, float valorProposto){
+    protected float fazerProposta(JogadorHumano jogador, InserirProposta proposta, float valorProposto){
 	    while (isCancelar(proposta)) {
             proposta.setVisible(true);
 
@@ -135,14 +114,14 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    private void acoesVisitante(JogadorHumano jogador) {
+    protected void acoesVisitante(JogadorHumano jogador) {
         String proprietario = "Esse Terreno Pertence a: " + getNomeDono(((JogadorHumano) this.dono));
         String aluguel = "Aluguel: " + this.getAluguel();
         String valor = "Valor: " + this.preco;
         FazerPropostaCompraPropriedade pcp = new FazerPropostaCompraPropriedade(proprietario, aluguel, valor);
         setVisible(pcp);
 
-        if (verifyPCP(jogador, pcp)) {
+        if (verifyPCP(pcp)) {
 
             InserirProposta proposta = new InserirProposta("FaÃ§a uma Proposta", "Saldo: R$ "+jogador.getContaBancaria().getSaldo(), "Valor Terreno: R$ "+this.preco, this.preco);
             float valorProposto = 0;
@@ -164,7 +143,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    private ComprarPropriedade criarComprarPropriedade(JogadorHumano jogador) {
+    protected ComprarPropriedade criarComprarPropriedade(JogadorHumano jogador) {
         String titulo = nomeMensagem(jogador) + " alcançou " + this.nome;
         String aluguel = "Aluguel: R$ "+this.aluguel;
         String valor = "Valor: R$ "+this.preco;
@@ -180,7 +159,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         return cp;
     }
 
-    private void acoesComprador(JogadorHumano jogador) {
+    protected void acoesComprador(JogadorHumano jogador) {
         ComprarPropriedade cp = criarComprarPropriedade(jogador);
 
         boolean comprar = cp.getComprar();
@@ -201,11 +180,11 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    private boolean validarConstrucaoCasa(JogadorHumano jogador){
+    protected boolean validarConstrucaoCasa(JogadorHumano jogador){
         return ControlBancoImobiliario.getInstance().validarConstrucaoCasa(jogador, this);
     }
 
-    private void comprarCasas(JogadorHumano jogador) {
+    protected void comprarCasas(JogadorHumano jogador) {
         if (validarConstrucaoCasa(jogador)) {
             if (this.numCasas < 4) {
                 if (jogador.pagar(this.precoCasa)) {
@@ -232,11 +211,11 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         }
     }
 
-    private String nomeMensagem(JogadorHumano jogador){
+    protected String nomeMensagem(JogadorHumano jogador){
         return Campo.getNomeJogador(jogador);
     }
 
-    private String getNomeDono(JogadorHumano jogador){
+    protected String getNomeDono(JogadorHumano jogador){
 	    return jogador.getNomeDono();
     }
 
@@ -251,6 +230,10 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
     public boolean isHasHotel() {
 	    return this.hasHotel;
     }
+
+    public float getPreco(){return this.preco;}
+
+    public Jogador getDono(){return this.dono;}
 
     public float getPrecoCasa() {
 	    return this.precoCasa;
