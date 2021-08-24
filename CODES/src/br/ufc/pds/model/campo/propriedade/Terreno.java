@@ -2,6 +2,7 @@ package br.ufc.pds.model.campo.propriedade;
 
 import br.ufc.pds.controller.ControlBancoImobiliario;
 import br.ufc.pds.interfaces.EfeitoEspecial;
+import br.ufc.pds.model.campo.Campo;
 import br.ufc.pds.model.jogador.Banco;
 import br.ufc.pds.model.jogador.Jogador;
 import br.ufc.pds.model.jogador.JogadorHumano;
@@ -66,7 +67,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
     }
 
     public RealizarConstrucao construir() {
-        RealizarConstrucao construir = new RealizarConstrucao(((JogadorHumano)this.dono).getNome()+" - Essa Propriedade � sua",  this.getNome(), "Saldo R$" + this.dono.getContaBancaria().getSaldo());
+        RealizarConstrucao construir = new RealizarConstrucao(getNomeDono(((JogadorHumano)this.dono))+" - Essa Propriedade � sua",  this.getNome(), "Saldo R$" + this.dono.getContaBancaria().getSaldo());
         construir.setVisible(true);
 
         return construir;
@@ -80,11 +81,11 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
                 System.out.println("Implementar");
                 this.comprarCasas((JogadorHumano) this.dono);
             } else {
-                JOptionPane.showMessageDialog(null, ((JogadorHumano)this.dono).getNome()+" N�o pode mais construir nesse Terreno");
+                JOptionPane.showMessageDialog(null, getNomeDono(((JogadorHumano)this.dono))+" N�o pode mais construir nesse Terreno");
             }
         } else {
             System.out.println();
-            JOptionPane.showMessageDialog(null,(((JogadorHumano) this.dono).getNome()+" encerrou o Turno."));
+            JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono))+" encerrou o Turno.");
         }
     }
 
@@ -107,12 +108,12 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
             try {
                 valorProposto = Float.parseFloat(proposta.getValorProposto());
                 if (valorProposto > jogador.getSaldo()) {
-                    JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " seu saldo é insuficiente.");
+                    JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono)) + " seu saldo é insuficiente.");
                     continue;
                 }
                 break;
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " insira um valor válido.");
+                JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono)) + " insira um valor válido.");
             }
         }
 	    return valorProposto;
@@ -122,7 +123,7 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         pedido.setVisible(true);
 
         if (pedido.getAceito()) {
-            JOptionPane.showMessageDialog(null, jogador.getNome()+" comprou "+this.nome+" de "+((JogadorHumano) this.dono).getNome()+" por R$ "+valorProposto);
+            JOptionPane.showMessageDialog(null, nomeMensagem(jogador)+" comprou "+this.nome+" de "+getNomeDono(((JogadorHumano) this.dono))+" por R$ "+valorProposto);
             this.numCasas = 0; //IMPLEMENTAR VENDER TODAS AS CASAS/HOTÉIS PARA O BANCO---------------------------------------------------------------------------
             jogador.pagar(this.preco);
             this.dono.receber(this.preco);
@@ -130,12 +131,12 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
             jogador.comprarPropriedade(this);
             this.dono = jogador;
         } else {
-            JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " recusou sua proposta.");
+            JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono)) + " recusou sua proposta.");
         }
     }
 
     private void acoesVisitante(JogadorHumano jogador) {
-        String proprietario = "Esse Terreno Pertence a: " + ((JogadorHumano) this.dono).getNome();
+        String proprietario = "Esse Terreno Pertence a: " + getNomeDono(((JogadorHumano) this.dono));
         String aluguel = "Aluguel: " + this.getAluguel();
         String valor = "Valor: " + this.preco;
         FazerPropostaCompraPropriedade pcp = new FazerPropostaCompraPropriedade(proprietario, aluguel, valor);
@@ -149,22 +150,22 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
             valorProposto = fazerProposta(jogador, proposta, valorProposto);
 
             if (isCancelar(proposta)){
-                MostrarPedidoDeCompra pedido = new MostrarPedidoDeCompra(((JogadorHumano) this.dono).getNome()+": "+jogador.getNome()+" fez uma Proposta", "Valor: R$ "+valorProposto, this.nome);
+                MostrarPedidoDeCompra pedido = new MostrarPedidoDeCompra(getNomeDono(((JogadorHumano) this.dono))+": "+nomeMensagem(jogador)+" fez uma Proposta", "Valor: R$ "+valorProposto, this.nome);
                 mostraPedidoCompra(jogador, pedido, valorProposto);
 
             } else {
-                JOptionPane.showMessageDialog(null,jogador.getNome() + " desistiu da compra.");
+                JOptionPane.showMessageDialog(null,nomeMensagem(jogador) + " desistiu da compra.");
             }
         } else {
             if (jogador.pagarCredor(this.getAluguel())) {
-                JOptionPane.showMessageDialog(null,jogador.getNome()+" encerrou o Turno e pagou R$ " + this.getAluguel() + " de aluguel");
+                JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" encerrou o Turno e pagou R$ " + this.getAluguel() + " de aluguel");
                 this.dono.receber(this.getAluguel());
             }
         }
     }
 
     private ComprarPropriedade criarComprarPropriedade(JogadorHumano jogador) {
-        String titulo = jogador.getNome() + " alcan�ou " + this.nome;
+        String titulo = nomeMensagem(jogador) + " alcan�ou " + this.nome;
         String aluguel = "Aluguel: R$ "+this.aluguel;
         String valor = "Valor: R$ "+this.preco;
         String saldo = "Seu Saldo: R$ " + jogador.getContaBancaria().getSaldo();
@@ -186,17 +187,17 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
 
         if (comprar) {
             if (jogador.pagar(this.preco)) {
-                JOptionPane.showMessageDialog(null,jogador.getNome()+" comprou " + this.nome + " por R$ "+this.preco);
+                JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" comprou " + this.nome + " por R$ "+this.preco);
                 this.dono.receber(this.preco);
                 this.dono.venderPropriedade(this);
                 jogador.comprarPropriedade(this);
                 this.dono = jogador;
             } else {
-                JOptionPane.showMessageDialog(null,jogador.getNome()+"  n�o tem dinheiro suficiente para comprar essa propriedade.");
+                JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+"  n�o tem dinheiro suficiente para comprar essa propriedade.");
             }
 
         } else {
-            JOptionPane.showMessageDialog(null,jogador.getNome()+" encerrou o Turno.");
+            JOptionPane.showMessageDialog(null, nomeMensagem(jogador)+" encerrou o Turno.");
         }
     }
 
@@ -208,27 +209,35 @@ public class Terreno extends Propriedade implements EfeitoEspecial {
         if (validarConstrucaoCasa(jogador)) {
             if (this.numCasas < 4) {
                 if (jogador.pagar(this.precoCasa)) {
-                    JOptionPane.showMessageDialog(null,jogador.getNome()+" construiu uma casa.");
+                    JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" construiu uma casa.");
                     Banco.getInstance().receber(this.precoCasa);
                     this.numCasas+=1;
                 } else {
-                    JOptionPane.showMessageDialog(null,jogador.getNome()+" você não possui saldo disponível.");
+                    JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" você não possui saldo disponível.");
                 }
             } else if (this.numCasas == 4) {
                 if (jogador.pagar(this.precoHotel)) {
-                    JOptionPane.showMessageDialog(null,jogador.getNome()+" construiu um hotel.");
+                    JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" construiu um hotel.");
                     Banco.getInstance().receber(this.precoCasa);
                     this.hasHotel = true;
                 } else {
-                    JOptionPane.showMessageDialog(null,jogador.getNome()+" você não possui saldo disponível.");
+                    JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" você não possui saldo disponível.");
                 }
             } else {
                 JOptionPane.showMessageDialog(null,"Você não pode mais construir nesse Terreno!");
             }
         } else {
             System.out.println("Não pode construir");
-            JOptionPane.showMessageDialog(null,jogador.getNome()+" ainda não pode construir casas neste Terreno.");
+            JOptionPane.showMessageDialog(null,nomeMensagem(jogador)+" ainda não pode construir casas neste Terreno.");
         }
+    }
+
+    private String nomeMensagem(JogadorHumano jogador){
+        return Campo.getNomeJogador(jogador);
+    }
+
+    private String getNomeDono(JogadorHumano jogador){
+	    return jogador.getNomeDono();
     }
 
     public String getCor() {

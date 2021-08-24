@@ -12,7 +12,7 @@ public class ImpostoDeRenda extends CampoEspecial implements EfeitoEspecial {
 
     public void aplicarEfeito(JogadorHumano jogador) {
         String titulo = this.nome;
-        String acao = jogador.getNome() + " pagou R$ 200 de Imposto de Renda.";
+        String acao = jogador.getNomeDono() + " pagou R$ 200 de Imposto de Renda.";
 
         this.showMensagem(titulo, acao);
 

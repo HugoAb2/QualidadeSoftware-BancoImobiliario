@@ -91,6 +91,10 @@ public class ControlBancoImobiliario implements ObserverJogador {
 		jogadorHumano.addObserver(this);
 	}
 
+	protected String getNome(JogadorHumano jogador){
+		return jogador.getNome();
+	}
+
 	private void iniciarRodada() {
 		try {
             this.jogadoresAtivos.forEach((key, value) -> {
@@ -98,12 +102,12 @@ public class ControlBancoImobiliario implements ObserverJogador {
                 JogadorDaVez jdv;
 
                 if (!(this.getJogadoresPresos().containsValue(value))) {
-                    jdv = new JogadorDaVez(value.getNome() + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getSaldo(), "Status: Jogador Livre");
+                    jdv = new JogadorDaVez(getNome(value) + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getSaldo(), "Status: Jogador Livre");
                     jdv.setVisible(true);
                     value.lancarDados();
                     this.jogadorRealizaTurno(value);
                 } else {
-                    jdv = new JogadorDaVez(value.getNome() + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getSaldo(), "Status: Jogador Preso");
+                    jdv = new JogadorDaVez(getNome(value) + " Jogando", "Propriedades: " + value.getPropriedades().size(), "Saldo: R$ " + value.getSaldo(), "Status: Jogador Preso");
                     jdv.setVisible(true);
                     value.lancarDados();
                     this.jogadorPresoRealizaTurno(value);
@@ -125,7 +129,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 
 	private void jogadorRealizaTurno(JogadorHumano jogador) {
 		if (jogador.getFichaCriminal().getNumDelitos()>=3){
-			JOptionPane.showMessageDialog(null, jogador.getNome() + " preso por trapacear.");
+			JOptionPane.showMessageDialog(null, getNome(jogador) + " preso por trapacear.");
 			this.prenderJogador(jogador);
 			jogador.getFichaCriminal().setNumDelitos(0);
 		} else {
@@ -134,7 +138,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 			try {
 				this.executaAcaoCampo((EfeitoEspecial) proximoCampo, jogador); //Aciona o efeito especial para o Jogador...
 			} catch (ClassCastException e) {
-                JOptionPane.showMessageDialog(null, jogador.getNome() + " passou por "+proximoCampo.getNome());
+                JOptionPane.showMessageDialog(null, getNome(jogador) + " passou por "+proximoCampo.getNome());
 			}
 		}
 	}
@@ -154,7 +158,7 @@ public class ControlBancoImobiliario implements ObserverJogador {
 	}
 
 	private void setJogadorDaVez(JogadorHumano jogador){
-		JogadorDaVez jdv = new JogadorDaVez(jogador.getNome() + " Jogando (Dados Iguais)", "Propriedades: " + jogador.getPropriedades().size(), "Saldo: R$ " + jogador.getSaldo(), "Status: Jogador Livre");
+		JogadorDaVez jdv = new JogadorDaVez(getNome(jogador) + " Jogando (Dados Iguais)", "Propriedades: " + jogador.getPropriedades().size(), "Saldo: R$ " + jogador.getSaldo(), "Status: Jogador Livre");
 		jdv.setVisible(true);
 	}
 
@@ -249,11 +253,11 @@ public class ControlBancoImobiliario implements ObserverJogador {
 
 	@Override
 	public void update(JogadorHumano jogador, float valor) {
-	    System.out.println(jogador.getNome()+" está devendo R$ "+valor);
+	    System.out.println(getNome(jogador)+" está devendo R$ "+valor);
 	    float propriedadesVendidas = 0;
 
 		if (jogador.getPropriedades().isEmpty()) {
-			JOptionPane.showMessageDialog(null, jogador.getNome() + " foi à falência (Sem dinheiro para pagar os credores).");
+			JOptionPane.showMessageDialog(null, getNome(jogador) + " foi à falência (Sem dinheiro para pagar os credores).");
 			this.jogadoresAtivos.remove(jogador.getId());
 			jogador.getPeca().obterLocalizacao().removerJogador(jogador);
 		} else {

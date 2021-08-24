@@ -1,6 +1,7 @@
 package br.ufc.pds.model.campo.campo_especial;
 
 import br.ufc.pds.interfaces.EfeitoEspecial;
+import br.ufc.pds.model.campo.Campo;
 import br.ufc.pds.model.jogador.Banco;
 import br.ufc.pds.model.jogador.JogadorHumano;
 
@@ -12,7 +13,7 @@ public class PontoDePartida extends CampoEspecial implements EfeitoEspecial {
 
 	public void aplicarEfeito(JogadorHumano jogador) {
 		String titulo = this.nome;
-		String acao = jogador.getNome() + " ganhou R$ 200.";
+		String acao = Campo.getNomeJogador(jogador) + " ganhou R$ 200.";
 
 		this.showMensagem(titulo, acao);
 

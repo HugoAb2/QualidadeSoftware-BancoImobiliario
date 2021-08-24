@@ -52,6 +52,10 @@ public class JogadorHumano extends Jogador implements SubjectObserver {
 		return this.nome;
 	}
 
+	public String getNomeDono(){
+		return this.nome;
+	}
+
 	public Peca getPeca() {
 		return this.peca;
 	}

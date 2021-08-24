@@ -45,14 +45,19 @@ public class ControlPagamentos {
     }
 
     private static void messageVendeuPagou(JogadorHumano jogador, Propriedade propriedade, float propriedadesVendidas){
-        JOptionPane.showMessageDialog(null, jogador.getNome() + " vendeu " + propriedade.getNome() + " por " + propriedadesVendidas + " para pagar suas dívidas");
+        JOptionPane.showMessageDialog(null, getNome(jogador) + " vendeu " + propriedade.getNome() + " por " + propriedadesVendidas + " para pagar suas dívidas");
     }
 
     private static void messagePagou(JogadorHumano jogador){
-        JOptionPane.showMessageDialog(null, jogador.getNome() + " pagou sua dívida e continua no jogo!");
+        JOptionPane.showMessageDialog(null, getNome(jogador) + " pagou sua dívida e continua no jogo!");
     }
 
     private static void messageNPagou(){
         JOptionPane.showMessageDialog(null,  "Dinheiro Insificiente Para Pagar O Credor");
     }
+
+    private static String getNome(JogadorHumano jogador){
+        return jogador.getNome();
+    }
 }
+

@@ -12,7 +12,7 @@ public class LucrosDividendos extends CampoEspecial implements EfeitoEspecial {
 
 	public void aplicarEfeito(JogadorHumano jogador) {
 		String titulo = this.nome;
-		String acao = jogador.getNome() + " recebeu R$ 200 de Lucros e Dividendos.";
+		String acao = jogador.getNomeDono() + " recebeu R$ 200 de Lucros e Dividendos.";
 
 		this.showMensagem(titulo, acao);
 

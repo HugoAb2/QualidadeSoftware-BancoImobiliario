@@ -28,6 +28,10 @@ public abstract class Campo {
 		return nome;
 	}
 
+	public static String getNomeJogador(JogadorHumano jogador){
+		return jogador.getNome();
+	}
+
 	public void addJogador(JogadorHumano jogadorHumano) {
 		this.listaJogadores.add(jogadorHumano);
 		jogadorHumano.getPeca().mudarLocalizacao(this);

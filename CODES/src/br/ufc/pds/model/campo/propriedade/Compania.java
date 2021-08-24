@@ -1,6 +1,7 @@
 package br.ufc.pds.model.campo.propriedade;
 
 import br.ufc.pds.interfaces.EfeitoEspecial;
+import br.ufc.pds.model.campo.Campo;
 import br.ufc.pds.model.jogador.Banco;
 import br.ufc.pds.model.jogador.Jogador;
 import br.ufc.pds.model.jogador.JogadorHumano;
@@ -28,7 +29,7 @@ public class Compania extends Propriedade implements EfeitoEspecial {
     }
 
     private boolean fpp(JogadorHumano jogador){
-        FazerPropostaCompraPropriedade fpp = new FazerPropostaCompraPropriedade("Essa Companhia pertence a :"+jogador.getNome(), "Valor da Taxa: R$ "+(this.taxa*(jogador.getDados()[0].obterValorDaFace()+jogador.getDados()[1].obterValorDaFace())), "Valor da Companhia: R$ "+this.preco);
+        FazerPropostaCompraPropriedade fpp = new FazerPropostaCompraPropriedade("Essa Companhia pertence a :"+getNome(jogador), "Valor da Taxa: R$ "+(this.taxa*(jogador.getDados()[0].obterValorDaFace()+jogador.getDados()[1].obterValorDaFace())), "Valor da Companhia: R$ "+this.preco);
         fpp.setVisible(true);
         if(fpp.getComprar()){
             return true;
@@ -46,28 +47,28 @@ public class Compania extends Propriedade implements EfeitoEspecial {
             try {
                 valorProposto = Float.parseFloat(proposta.getValorProposto());
                 if (valorProposto > jogador.getContaBancaria().getSaldo()) {
-                    JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " seu saldo é insuficiente.");
+                    JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono)) + " seu saldo é insuficiente.");
                     continue;
                 }
                 break;
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " insira um valor válido.");
+                JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono)) + " insira um valor válido.");
             }
         }
     }
 
     private void mostraPedido(JogadorHumano jogador, float valorProposto){
-        MostrarPedidoDeCompra pedido = new MostrarPedidoDeCompra(((JogadorHumano) this.dono).getNome()+": "+jogador.getNome()+" fez uma Proposta", "Valor: R$ "+valorProposto, this.nome);
+        MostrarPedidoDeCompra pedido = new MostrarPedidoDeCompra(getNomeDono(((JogadorHumano) this.dono))+": "+getNome(jogador)+" fez uma Proposta", "Valor: R$ "+valorProposto, this.nome);
         pedido.setVisible(true);
         if (pedido.getAceito()) {
-            JOptionPane.showMessageDialog(null, jogador.getNome()+" comprou "+this.nome+" de "+((JogadorHumano) this.dono).getNome()+" por R$ "+valorProposto);
+            JOptionPane.showMessageDialog(null, getNome(jogador)+" comprou "+this.nome+" de "+getNomeDono(((JogadorHumano) this.dono))+" por R$ "+valorProposto);
             jogador.getContaBancaria().pagar(this.preco);
             this.dono.receber(this.preco);
             this.dono.venderPropriedade(this);
             jogador.comprarPropriedade(this);
             this.dono = jogador;
         } else {
-            JOptionPane.showMessageDialog(null,((JogadorHumano) this.dono).getNome() + " recusou sua proposta.");
+            JOptionPane.showMessageDialog(null,getNomeDono(((JogadorHumano) this.dono)) + " recusou sua proposta.");
             this.computarTaxa(jogador);
         }
     }
@@ -80,7 +81,7 @@ public class Compania extends Propriedade implements EfeitoEspecial {
     }
 
     private boolean comprarPropriedade(JogadorHumano jogador){
-        String titulo = jogador.getNome() + " alcançou " + this.nome;
+        String titulo = getNome(jogador) + " alcançou " + this.nome;
         String taxa = "Taxa: R$ "+this.taxa;
         String valor = "Valor: R$ "+this.preco;
         String saldo = "Seu Saldo: R$ " + jogador.getSaldo();
@@ -95,12 +96,12 @@ public class Compania extends Propriedade implements EfeitoEspecial {
 
     private void payOrNot(JogadorHumano jogador){
         if (jogador.getContaBancaria().pagar(this.preco)) {
-            JOptionPane.showMessageDialog(null,jogador.getNome()+" comprou " + this.nome + " por R$"+this.preco);
+            JOptionPane.showMessageDialog(null,getNome(jogador)+" comprou " + this.nome + " por R$"+this.preco);
             this.dono.receber(this.preco);
             jogador.comprarPropriedade(this);
             this.dono = jogador;
         } else {
-            JOptionPane.showMessageDialog(null,jogador.getNome()+" não tem saldo suficiente para comprar essa companhia!");
+            JOptionPane.showMessageDialog(null,getNome(jogador)+" não tem saldo suficiente para comprar essa companhia!");
         }
     }
 
@@ -135,8 +136,10 @@ public class Compania extends Propriedade implements EfeitoEspecial {
             }
     }
 
+    private String getNomeDono(JogadorHumano jogador){ return  jogador.getNomeDono();}
+
     private String getNome(JogadorHumano jogador){
-	    return jogador.getNome();
+	    return Campo.getNomeJogador(jogador);
     }
 
     private void mensagemTela(String txt){
@@ -152,7 +155,7 @@ public class Compania extends Propriedade implements EfeitoEspecial {
     private void computarTaxa(JogadorHumano jogador){
         float taxaCobrada = this.taxa * (jogador.getDados()[0].obterValorDaFace() + jogador.getDados()[1].obterValorDaFace());
         if (jogador.pagarCredor(taxaCobrada)) {
-            JOptionPane.showMessageDialog(null,jogador.getNome()+" pagou R$" + taxaCobrada);
+            JOptionPane.showMessageDialog(null,getNome(jogador)+" pagou R$" + taxaCobrada);
             this.dono.receber(taxaCobrada);
         }
     }

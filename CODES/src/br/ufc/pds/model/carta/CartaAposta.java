@@ -25,6 +25,6 @@ public class CartaAposta extends Carta {
 				}
 			}
 		});
-		this.showCarta(this.titulo, this.descricao, jogador.getNome() + " Recebeu R$ 50 de cada Jogador.");
+		this.showCarta(this.titulo, this.descricao, Carta.getNomeDono(jogador) + " Recebeu R$ 50 de cada Jogador.");
 	}
 }

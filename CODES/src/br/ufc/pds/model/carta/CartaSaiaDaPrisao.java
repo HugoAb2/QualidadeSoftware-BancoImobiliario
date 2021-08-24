@@ -14,11 +14,13 @@ public class CartaSaiaDaPrisao extends Carta {
 	public void acao(JogadorHumano jogador) {
 		if(ControlBancoImobiliario.getInstance().getJogadoresPresos().containsValue(jogador)) {
 			ControlBancoImobiliario.getInstance().soltarJogador(jogador);
-			this.showCarta(this.titulo, this.descricao, jogador.getNome() + " foi solto da Prisão.");
+			this.showCarta(this.titulo, this.descricao, getNome(jogador) + " foi solto da Prisão.");
 		} else {
 			jogador.setCartaPrisao(this);
-			this.showCarta(this.titulo, this.descricao, jogador.getNome() + " ganhou: 'Saída Livre da Prisão'");
+			this.showCarta(this.titulo, this.descricao, getNome(jogador) + " ganhou: 'Saída Livre da Prisão'");
 		}
 	}
-
+	private String getNome(JogadorHumano jogador){
+		return Carta.getNomeDono(jogador);
+	}
 }

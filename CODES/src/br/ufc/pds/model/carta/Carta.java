@@ -19,4 +19,8 @@ public abstract class Carta {
 		MensagemSorteReves ms = new MensagemSorteReves(titulo, mensagem, acao);
 		ms.setVisible(true);
 	}
+
+	public static String getNomeDono(JogadorHumano jogador){
+		return jogador.getNomeDono();
+	}
 }

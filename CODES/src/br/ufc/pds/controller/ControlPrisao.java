@@ -24,7 +24,7 @@ public class ControlPrisao {
             controler.soltarJogador(jogador);
             jogador.getFichaCriminal().setRodadasPreso(0);
             controler.alterarPosicaoDoJogador(jogador);
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " saiu da Prisão (Carta Coringa)");
+            JOptionPane.showMessageDialog(null, controler.getNome(jogador) + " saiu da Prisão (Carta Coringa)");
         }
 
     }
@@ -34,7 +34,7 @@ public class ControlPrisao {
             controler.soltarJogador(jogador);
             jogador.getFichaCriminal().setRodadasPreso(0);
             controler.alterarPosicaoDoJogador(jogador);
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " saiu da Prisão (Dados Iguais)");
+            JOptionPane.showMessageDialog(null, controler.getNome(jogador) + " saiu da Prisão (Dados Iguais)");
         }
     }
     protected void sairDaPrisaoPaga(JogadorHumano jogador){
@@ -43,15 +43,15 @@ public class ControlPrisao {
             controler.soltarJogador(jogador);
             jogador.getFichaCriminal().setRodadasPreso(0);
             controler.alterarPosicaoDoJogador(jogador);
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " saiu da Prisão (Pagou R$ 50,00 ao Banco)");
+            JOptionPane.showMessageDialog(null, controler.getNome(jogador) + " saiu da Prisão (Pagou R$ 50,00 ao Banco)");
         }
     }
 
     protected void continuarPreso(JogadorHumano jogador){
         int delitos = jogador.getFichaCriminal().getRodadasPreso() + 1;
-        System.out.println(delitos + " - " + jogador.getNome());
+        System.out.println(delitos + " - " + controler.getNome(jogador));
         jogador.getFichaCriminal().setRodadasPreso(delitos);
-        JOptionPane.showMessageDialog(null, jogador.getNome() + " continuará Preso");
+        JOptionPane.showMessageDialog(null, controler.getNome(jogador) + " continuará Preso");
     }
 
     protected void jogadorPresoRealizaTurno(JogadorHumano jogador, ControlBancoImobiliario controler) {
@@ -66,4 +66,6 @@ public class ControlPrisao {
             continuarPreso(jogador);
         }
     }
+
+
 }
